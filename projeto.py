@@ -26,6 +26,17 @@ def dificuldade():
         return 15
 
 #// ----------------------------------------------------------------//
+#       Contagem de bombas restantes para o fim do jogo         
+#// ----------------------------------------------------------------//
+def bombasRestantes(t, m):
+    cont = 0
+    for l in range(t):
+        for c in range(t):
+            if m[l][c] == -1:
+                cont = cont + 1
+    return cont
+
+#// ----------------------------------------------------------------//
 #       Gera campo aleatório a partir da dificuldade escolhida.         
 #// ----------------------------------------------------------------//
 def gerarCampo(t):
@@ -90,38 +101,108 @@ def contaQtdMenosUm(m, i, j):
 #// ----------------------------------------------------------------//
 #                           JOGO ATUAL 
 #// ----------------------------------------------------------------//
-def marcaPosicao(m, comp, l, c):
+def marcaPosicao(m, comp, l, c, t):
     m[l][c] = comp[l][c]
-    return m
+        
+    if l > 0 and c > 0 and l < t and c < t: # Mostra as posições sem bomba caso linha/coluna > 0 e linha/coluna < tamanho
+        if m[l][c] == 0 and comp[l-1][c] == 0 and comp[l-1][c-1] == 0 and comp[l-1][c+1] == 0 and comp[l][c-1] == 0 and comp[l][c+1] == 0 and comp[l+1][c] == 0 and comp[l+1][c-1] == 0 and comp[l+1][c+1] == 0:
+           m[l-1][c] = comp[l-1][c]
+           m[l-1][c-1] = comp[l-1][c-1]
+           m[l-1][c+1] = comp[l-1][c+1]
+           m[l][c-1] = comp[l][c-1]
+           m[l][c+1] = comp[l][c+1]
+           m[l+1][c] = comp[l+1][c]
+           m[l+1][c-1] = comp[l+1][c-1]
+           m[l+1][c+1] = comp[l+1][c+1]
 
+    elif l == 0 and c > 0 and c < t:
+        if m[l][c] == 0 and comp[l][c-1] == 0 and comp[l][c+1] == 0 and comp[l+1][c] == 0 and comp[l+1][c-1] == 0 and comp[l+1][c+1] == 0:
+           m[l][c-1] = comp[l][c-1]
+           m[l][c+1] = comp[l][c+1]
+           m[l+1][c] = comp[l+1][c]
+           m[l+1][c-1] = comp[l+1][c-1]
+           m[l+1][c+1] = comp[l+1][c+1]
+
+    elif l == t and c > 0 and c < t:
+        if m[l][c] == 0 and comp[l-1][c] == 0 and comp[l-1][c-1] == 0 and comp[l-1][c+1] == 0 and comp[l][c-1] == 0 and comp[l][c+1] == 0:
+           m[l-1][c] = comp[l-1][c]
+           m[l-1][c-1] = comp[l-1][c-1]
+           m[l-1][c+1] = comp[l-1][c+1]
+           m[l][c-1] = comp[l][c-1]
+           m[l][c+1] = comp[l][c+1]
+
+    elif l == 0 and c == 0:
+        if m[l][c] == 0 and comp[l][c+1] == 0 and comp[l+1][c] == 0 and comp[l+1][c+1] == 0:
+           m[l][c+1] = comp[l][c+1]
+           m[l+1][c] = comp[l+1][c]
+           m[l+1][c+1] = comp[l+1][c+1]
+
+    elif l == 0 and c == t:
+        if m[l][c] == 0 and comp[l][c-1] == 0 and comp[l+1][c] == 0 and comp[l+1][c-1] == 0:
+           m[l][c-1] = comp[l][c-1]
+           m[l+1][c] = comp[l+1][c]
+           m[l+1][c-1] = comp[l+1][c-1]
+
+    elif l == t and c == t:
+        if m[l][c] == 0 and comp[l-1][c] == 0 and comp[l-1][c-1] == 0 and comp[l][c-1] == 0:
+           m[l-1][c] = comp[l-1][c]
+           m[l-1][c-1] = comp[l-1][c-1]
+           m[l][c-1] = comp[l][c-1]
+
+    elif l == t and c == 0:
+        if m[l][c] == 0 and comp[l-1][c] == 0 and comp[l-1][c+1] == 0 and comp[l][c+1] == 0:
+           m[l-1][c] = comp[l-1][c]
+           m[l-1][c+1] = comp[l-1][c+1]
+           m[l][c+1] = comp[l][c+1]
+
+    
+    elif l > 0 and l < t and c == 0:
+        if m[l][c] == 0 and comp[l-1][c] == 0 and comp[l-1][c+1] == 0 and comp[l][c+1] == 0 and comp[l+1][c] == 0 and comp[l+1][c+1] == 0:
+           m[l-1][c] = comp[l-1][c]
+           m[l-1][c+1] = comp[l-1][c+1]
+           m[l][c+1] = comp[l][c+1]
+           m[l+1][c] = comp[l+1][c]
+           m[l+1][c+1] = comp[l+1][c+1]
+
+    elif l > 0 and l < t and c == t:
+        if m[l][c] == 0 and comp[l-1][c] == 0 and comp[l-1][c-1] == 0 and comp[l][c-1] == 0 and comp[l+1][c] == 0 and comp[l+1][c-1] == 0:
+           m[l-1][c] = comp[l-1][c]
+           m[l-1][c-1] = comp[l-1][c-1]
+           m[l][c-1] = comp[l][c-1]
+           m[l+1][c] = comp[l+1][c]
+           m[l+1][c-1] = comp[l+1][c-1]
+
+    return m
+    
 #// ----------------------------------------------------------------//
 #                              MAIN 
 #// ----------------------------------------------------------------//
 def main():
-    tamanho = dificuldade()
-    matriz = gerarCampo(tamanho)
-    campoVazio = default(tamanho)
-    campoAtual = campoVazio
-    campoComputado = computaBombas(matriz)
+    tamanho = dificuldade()                # Tamanho do campo
+    matriz = gerarCampo(tamanho)           # Primeiro campo gerado, utilizado para elaboração das outras matrizes
+    contBombas = bombasRestantes(tamanho, matriz)  # Computa o total de bombas no campo gerado
+    campoVazio = default(tamanho)          # Campo vazio inicial preenchido "#" que será alterado futuramente
+    campoAtual = campoVazio                # Campo que será modificado pelo usuário
+    campoComputado = computaBombas(matriz) # Campo com as posições e números computados
     fimDeJogo = False
-    mostrarMatriz(tamanho,matriz)
+    posicoesParaDescobrir = tamanho * tamanho - contBombas
+    mostrarMatriz(tamanho,matriz) # DELETAR DEPOIS
     print(' ')
-    mostrarMatriz(tamanho, campoAtual)  
+    mostrarMatriz(tamanho, campoComputado)  
     while not fimDeJogo:
         linha = int(input("Digite a linha que deseja marcar: ")) -1
         coluna = int(input("Digite a coluna que deseja marcar: ")) -1
-        campoAtual = marcaPosicao(campoAtual, campoComputado, linha, coluna)
+        campoAtual = marcaPosicao(campoAtual, campoComputado, linha, coluna, tamanho)
         if campoAtual[linha][coluna] == -1:
             fimDeJogo = True
             print('Clicou na bomba! Voce perdeu!')
+        else:
+            posicoesParaDescobrir = posicoesParaDescobrir - 1
+            if posicoesParaDescobrir == 0:
+                fimDeJogo = True
+                print('Descobriu totas as bombas! Voce venceu!')
         mostrarMatriz(tamanho, campoAtual)
-
-
-
-    
-        
-        
-
+                
 
 #// ----------------------------------------------------------------//
 #                      PROGRAMA PRINCIPAL
