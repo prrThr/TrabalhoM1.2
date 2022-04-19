@@ -2,6 +2,7 @@ from marcaPosicoes import marcaPosicao
 import random
 import os ## Para usar o clear
 clear = lambda: os.system('cls')
+
 #// ----------------------------------------------------------------//
 #      Escolhe uma das 3 dificuldades (apenas matrizes quadradas) 
 #// ----------------------------------------------------------------//
@@ -28,7 +29,7 @@ def dificuldade():
         return 15
 
 #// ----------------------------------------------------------------//
-#       Contagem de bombas restantes para o fim do jogo         
+#         Contagem de bombas restantes para o fim do jogo         
 #// ----------------------------------------------------------------//
 def bombasRestantes(t, m):
     cont = 0
@@ -39,7 +40,7 @@ def bombasRestantes(t, m):
     return cont
 
 #// ----------------------------------------------------------------//
-#       Gera campo aleatório a partir da dificuldade escolhida.         
+#      Gera um campo aleatório a partir da dificuldade escolhida       
 #// ----------------------------------------------------------------//
 def gerarCampo(t):
     inicial = []
@@ -52,7 +53,7 @@ def gerarCampo(t):
     return inicial
 
 #// ----------------------------------------------------------------//
-#      Mostra a matriz (usando apenas para construir o programa) 
+#                       Mostra a matriz 
 #// ----------------------------------------------------------------//
 def mostrarMatriz(t,m):
     for i in range(t):
@@ -71,8 +72,9 @@ def default(t):
             linha.append('#')
         campoVazio.append(linha) 
     return campoVazio
+
 #// ----------------------------------------------------------------//
-#  Computa a quantidade de bombas no jogo atual (NÃO ENTENDI O QUE ACONTECEU AQUI)
+#          Computa a quantidade de bombas no jogo atual 
 #// ----------------------------------------------------------------//
 def computaBombas(m):
     matrizM = []
@@ -99,11 +101,6 @@ def contaQtdMenosUm(m, i, j):
                 elif linha == i + 1 and (coluna == j - 1 or coluna == j or coluna == j + 1):
                     cont = cont + 1
     return cont
-
-#// ----------------------------------------------------------------//
-#                           JOGO ATUAL 
-#// ----------------------------------------------------------------//
-
     
 #// ----------------------------------------------------------------//
 #                              MAIN 
@@ -117,31 +114,47 @@ def main():
     campoComputado = computaBombas(matriz) # Campo com as posições e números computados
     fimDeJogo = False
     posicoesParaDescobrir = tamanho * tamanho - contBombas
-    mostrarMatriz(tamanho, campoComputado)  
     while not fimDeJogo:
         clear()
-        print(' ')
-        print('=================================================')
-        print(' ')
         mostrarMatriz(tamanho, campoAtual)
+        jogadaJafeita = True
+        while jogadaJafeita == True:
+            linha = int(input("Digite a linha que deseja marcar: ")) -1
+            coluna = int(input("Digite a coluna que deseja marcar: ")) -1
+            if campoAtual[linha][coluna] != '#':
+                jogadaJafeita = True
+                print('Voce ja jogou nesta posicao! Tente outra vez!')
+            else:
+                jogadaJafeita = False
         puxarCont = False
-        linha = int(input("Digite a linha que deseja marcar: ")) -1
-        coluna = int(input("Digite a coluna que deseja marcar: ")) -1
         campoAtual = marcaPosicao(campoAtual, campoComputado, linha, coluna, tamanho, puxarCont)
         puxarCont = True
         contagem = marcaPosicao(campoAtual, campoComputado, linha, coluna, tamanho, puxarCont)
         posicoesParaDescobrir = posicoesParaDescobrir - contagem
         if campoAtual[linha][coluna] == -1:
+            clear()
             fimDeJogo = True
-            print('Clicou na bomba! Voce perdeu!')
+            print('')
+            print('XXX===============================XXX')
+            print('    Clicou na bomba! Voce perdeu!')
+            print('XXX===============================XXX')
+            print('')
         else:
             if posicoesParaDescobrir == 0:
+                clear()
                 fimDeJogo = True
-                print('Descobriu totas as bombas! Voce venceu!')
-    mostrarMatriz(tamanho, campoAtual)
-                
+                print('')
+                print('!!!===============================!!!')
+                print('           Voce venceu!')
+                print('!!!===============================!!!')
+                print('')
+    mostrarMatriz(tamanho, campoAtual)   
+    print('')
+    print('-------------------------------------------------')
+    print('')
+    mostrarMatriz(tamanho, campoComputado)        
 
 #// ----------------------------------------------------------------//
-#                      PROGRAMA PRINCIPAL
+#                      Ativação do programa
 #// ----------------------------------------------------------------//
 main()
