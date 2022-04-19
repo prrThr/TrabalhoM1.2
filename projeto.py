@@ -1,6 +1,8 @@
 import random
 
-# ===== Escolhe uma das 3 dificuldades (apenas matrizes quadradas) ===== #
+#// ----------------------------------------------------------------//
+#      Escolhe uma das 3 dificuldades (apenas matrizes quadradas) 
+#// ----------------------------------------------------------------//
 def dificuldade():
     print('=====================================')
     print('ESCOLHA A DIFICULDADE: ')
@@ -23,51 +25,105 @@ def dificuldade():
     else:
         return 15
 
-# ===== Gera campo aleatório a partir da dificuldade escolhida. ===== #
+#// ----------------------------------------------------------------//
+#       Gera campo aleatório a partir da dificuldade escolhida.         
+#// ----------------------------------------------------------------//
 def gerarCampo(t):
-    matriz = []
+    inicial = []
     for l in range(t):
         linha = []
         for c in range(t):
             num = random.randint(-1, 0)
             linha.append(num)
-        matriz.append(linha)
-    return matriz
+        inicial.append(linha)
+    return inicial
 
-# ===== Mostra a matriz (usando apenas para construir o programa) ===== #
+#// ----------------------------------------------------------------//
+#      Mostra a matriz (usando apenas para construir o programa) 
+#// ----------------------------------------------------------------//
 def mostrarMatriz(t,m):
     for i in range(t):
         for j in range(t):
-            print(f'{m[i][j]:^3}', ' ', end='')
+            print(' '*4,f'{m[i][j]:^3}', ' ', end='')
         print('')       
 
-# ===== Matriz padrão apenas com '-'
+#// ----------------------------------------------------------------//
+#                 Matriz padrão apenas com '-'
+#// ----------------------------------------------------------------//
 def default(t):
-    padrao = []
+    campoVazio = []
     for l in range(t):
         linha = []
         for c in range(t):
-            linha.append('-')
-        padrao.append(linha) 
-    return padrao
+            linha.append('#')
+        campoVazio.append(linha) 
+    return campoVazio
+#// ----------------------------------------------------------------//
+#  Computa a quantidade de bombas no jogo atual (NÃO ENTENDI O QUE ACONTECEU AQUI)
+#// ----------------------------------------------------------------//
+def computaBombas(m):
+    matrizM = []
+    for linha in range(len(m)):
+        matrizM.append([])
+        for coluna in range(len(m[linha])):
+            if m[linha][coluna] == -1:
+                matrizM[linha].append(-1)
+                continue
+            matrizM[linha].append(contaQtdMenosUm(m, linha, coluna))
+    return matrizM  
 
-#def QntdBombas():
-    
+def contaQtdMenosUm(m, i, j):
+    cont = 0
+    for linha in range(len(m)):
+        for coluna in range(len(m[linha])):
+            if linha == i and coluna == j:
+                continue
+            if m[linha][coluna] == -1:
+                if linha == (i - 1) and (coluna == (j-1) or coluna == j or coluna == (j+1)):
+                    cont = cont + 1
+                elif linha == i and (coluna == j - 1 or coluna == j + 1):
+                    cont = cont + 1
+                elif linha == i + 1 and (coluna == j - 1 or coluna == j or coluna == j + 1):
+                    cont = cont + 1
+    return cont
 
+#// ----------------------------------------------------------------//
+#                           JOGO ATUAL 
+#// ----------------------------------------------------------------//
+def marcaPosicao(m, comp, l, c):
+    m[l][c] = comp[l][c]
+    return m
 
-
+#// ----------------------------------------------------------------//
+#                              MAIN 
+#// ----------------------------------------------------------------//
 def main():
     tamanho = dificuldade()
     matriz = gerarCampo(tamanho)
-    padrao = default(tamanho)
-    mostrarMatriz(tamanho, matriz)
-    print ('')
-    mostrarMatriz(tamanho,padrao)
+    campoVazio = default(tamanho)
+    campoAtual = campoVazio
+    campoComputado = computaBombas(matriz)
+    fimDeJogo = False
+    mostrarMatriz(tamanho,matriz)
+    print(' ')
+    mostrarMatriz(tamanho, campoAtual)  
+    while not fimDeJogo:
+        linha = int(input("Digite a linha que deseja marcar: ")) -1
+        coluna = int(input("Digite a coluna que deseja marcar: ")) -1
+        campoAtual = marcaPosicao(campoAtual, campoComputado, linha, coluna)
+        if campoAtual[linha][coluna] == -1:
+            fimDeJogo = True
+            print('Clicou na bomba! Voce perdeu!')
+        mostrarMatriz(tamanho, campoAtual)
+
+
+
+    
         
         
 
 
-
-#===================PROGRAMA PRINCIPAL===================#
-
+#// ----------------------------------------------------------------//
+#                      PROGRAMA PRINCIPAL
+#// ----------------------------------------------------------------//
 main()
