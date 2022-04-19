@@ -1,5 +1,7 @@
+from marcaPosicoes import marcaPosicao
 import random
-
+import os ## Para usar o clear
+clear = lambda: os.system('cls')
 #// ----------------------------------------------------------------//
 #      Escolhe uma das 3 dificuldades (apenas matrizes quadradas) 
 #// ----------------------------------------------------------------//
@@ -101,78 +103,7 @@ def contaQtdMenosUm(m, i, j):
 #// ----------------------------------------------------------------//
 #                           JOGO ATUAL 
 #// ----------------------------------------------------------------//
-def marcaPosicao(m, comp, l, c, t):
-    m[l][c] = comp[l][c]
-        
-    if l > 0 and c > 0 and l < t and c < t: # Mostra as posições sem bomba caso linha/coluna > 0 e linha/coluna < tamanho
-        if m[l][c] == 0 and comp[l-1][c] == 0 and comp[l-1][c-1] == 0 and comp[l-1][c+1] == 0 and comp[l][c-1] == 0 and comp[l][c+1] == 0 and comp[l+1][c] == 0 and comp[l+1][c-1] == 0 and comp[l+1][c+1] == 0:
-           m[l-1][c] = comp[l-1][c]
-           m[l-1][c-1] = comp[l-1][c-1]
-           m[l-1][c+1] = comp[l-1][c+1]
-           m[l][c-1] = comp[l][c-1]
-           m[l][c+1] = comp[l][c+1]
-           m[l+1][c] = comp[l+1][c]
-           m[l+1][c-1] = comp[l+1][c-1]
-           m[l+1][c+1] = comp[l+1][c+1]
 
-    elif l == 0 and c > 0 and c < t:
-        if m[l][c] == 0 and comp[l][c-1] == 0 and comp[l][c+1] == 0 and comp[l+1][c] == 0 and comp[l+1][c-1] == 0 and comp[l+1][c+1] == 0:
-           m[l][c-1] = comp[l][c-1]
-           m[l][c+1] = comp[l][c+1]
-           m[l+1][c] = comp[l+1][c]
-           m[l+1][c-1] = comp[l+1][c-1]
-           m[l+1][c+1] = comp[l+1][c+1]
-
-    elif l == t and c > 0 and c < t:
-        if m[l][c] == 0 and comp[l-1][c] == 0 and comp[l-1][c-1] == 0 and comp[l-1][c+1] == 0 and comp[l][c-1] == 0 and comp[l][c+1] == 0:
-           m[l-1][c] = comp[l-1][c]
-           m[l-1][c-1] = comp[l-1][c-1]
-           m[l-1][c+1] = comp[l-1][c+1]
-           m[l][c-1] = comp[l][c-1]
-           m[l][c+1] = comp[l][c+1]
-
-    elif l == 0 and c == 0:
-        if m[l][c] == 0 and comp[l][c+1] == 0 and comp[l+1][c] == 0 and comp[l+1][c+1] == 0:
-           m[l][c+1] = comp[l][c+1]
-           m[l+1][c] = comp[l+1][c]
-           m[l+1][c+1] = comp[l+1][c+1]
-
-    elif l == 0 and c == t:
-        if m[l][c] == 0 and comp[l][c-1] == 0 and comp[l+1][c] == 0 and comp[l+1][c-1] == 0:
-           m[l][c-1] = comp[l][c-1]
-           m[l+1][c] = comp[l+1][c]
-           m[l+1][c-1] = comp[l+1][c-1]
-
-    elif l == t and c == t:
-        if m[l][c] == 0 and comp[l-1][c] == 0 and comp[l-1][c-1] == 0 and comp[l][c-1] == 0:
-           m[l-1][c] = comp[l-1][c]
-           m[l-1][c-1] = comp[l-1][c-1]
-           m[l][c-1] = comp[l][c-1]
-
-    elif l == t and c == 0:
-        if m[l][c] == 0 and comp[l-1][c] == 0 and comp[l-1][c+1] == 0 and comp[l][c+1] == 0:
-           m[l-1][c] = comp[l-1][c]
-           m[l-1][c+1] = comp[l-1][c+1]
-           m[l][c+1] = comp[l][c+1]
-
-    
-    elif l > 0 and l < t and c == 0:
-        if m[l][c] == 0 and comp[l-1][c] == 0 and comp[l-1][c+1] == 0 and comp[l][c+1] == 0 and comp[l+1][c] == 0 and comp[l+1][c+1] == 0:
-           m[l-1][c] = comp[l-1][c]
-           m[l-1][c+1] = comp[l-1][c+1]
-           m[l][c+1] = comp[l][c+1]
-           m[l+1][c] = comp[l+1][c]
-           m[l+1][c+1] = comp[l+1][c+1]
-
-    elif l > 0 and l < t and c == t:
-        if m[l][c] == 0 and comp[l-1][c] == 0 and comp[l-1][c-1] == 0 and comp[l][c-1] == 0 and comp[l+1][c] == 0 and comp[l+1][c-1] == 0:
-           m[l-1][c] = comp[l-1][c]
-           m[l-1][c-1] = comp[l-1][c-1]
-           m[l][c-1] = comp[l][c-1]
-           m[l+1][c] = comp[l+1][c]
-           m[l+1][c-1] = comp[l+1][c-1]
-
-    return m
     
 #// ----------------------------------------------------------------//
 #                              MAIN 
@@ -186,22 +117,28 @@ def main():
     campoComputado = computaBombas(matriz) # Campo com as posições e números computados
     fimDeJogo = False
     posicoesParaDescobrir = tamanho * tamanho - contBombas
-    mostrarMatriz(tamanho,matriz) # DELETAR DEPOIS
-    print(' ')
     mostrarMatriz(tamanho, campoComputado)  
     while not fimDeJogo:
+        clear()
+        print(' ')
+        print('=================================================')
+        print(' ')
+        mostrarMatriz(tamanho, campoAtual)
+        puxarCont = False
         linha = int(input("Digite a linha que deseja marcar: ")) -1
         coluna = int(input("Digite a coluna que deseja marcar: ")) -1
-        campoAtual = marcaPosicao(campoAtual, campoComputado, linha, coluna, tamanho)
+        campoAtual = marcaPosicao(campoAtual, campoComputado, linha, coluna, tamanho, puxarCont)
+        puxarCont = True
+        contagem = marcaPosicao(campoAtual, campoComputado, linha, coluna, tamanho, puxarCont)
+        posicoesParaDescobrir = posicoesParaDescobrir - contagem
         if campoAtual[linha][coluna] == -1:
             fimDeJogo = True
             print('Clicou na bomba! Voce perdeu!')
         else:
-            posicoesParaDescobrir = posicoesParaDescobrir - 1
             if posicoesParaDescobrir == 0:
                 fimDeJogo = True
                 print('Descobriu totas as bombas! Voce venceu!')
-        mostrarMatriz(tamanho, campoAtual)
+    mostrarMatriz(tamanho, campoAtual)
                 
 
 #// ----------------------------------------------------------------//
